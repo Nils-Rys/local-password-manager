@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7823957-991b-418f-b504-18c800e0dcc6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/company/CreateAccount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/DatabaseManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/company/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Login.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

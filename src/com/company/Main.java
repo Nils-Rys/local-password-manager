@@ -2,8 +2,11 @@ package com.company;
 
 public class Main {
 
+    // Milestone 1 	Frame work, pseudocode, how to create keys and encryption method
+
     public static void main(String[] args) {
-        Login login = new Login();
+        User user = new User();
+        Login login = new Login(user);
         CreateAccount createAccount = new CreateAccount();
         // TODO implement database
         //DatabaseManager databaseManager = new DatabaseManager();
