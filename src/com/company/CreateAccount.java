@@ -1,5 +1,7 @@
 package com.company;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CreateAccount {
@@ -22,7 +24,23 @@ public class CreateAccount {
         //TODO create a password checking function
 
         String hashedPassword = encryption.encryptThisString(password);
+        createFile(hashedUsername);
 
+
+    }
+
+    private void createFile(String hashedUser){
+        try {
+            File myObj = new File("files/"+hashedUser+".json");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
     }
 }

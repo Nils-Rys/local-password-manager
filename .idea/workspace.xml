@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7823957-991b-418f-b504-18c800e0dcc6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/CreateAccount.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/CreateAccount.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/DatabaseManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/DatabaseManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Login.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/CreateAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/CreateAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/Encryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Encryption.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Login.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +60,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="local-password-manager" />
-      <option name="PROGRAM_PARAMETERS" value="l" />
+      <option name="PROGRAM_PARAMETERS" value="c" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
