@@ -3,8 +3,9 @@ package com.company;
 import java.util.Scanner;
 
 public class CreateAccount {
+    private Encryption encryption;
     public CreateAccount(){
-
+        encryption = new Encryption();
     }
 
 
@@ -13,14 +14,15 @@ public class CreateAccount {
         System.out.print("Username: ");
         Scanner scanner = new Scanner(System.in);
         String username = scanner.nextLine();
-        String hashedUsername = encryptThisString(username);
+        String hashedUsername = encryption.encryptThisString(username);
         //System.out.println("you gave us " + username);
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
         //TODO create a password checking function
 
-        String hashedPassword = encryptThisString(password);
+        String hashedPassword = encryption.encryptThisString(password);
+
 
     }
 }

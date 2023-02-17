@@ -1,5 +1,9 @@
 package com.company;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Encryption {
     private byte[] key;
 
@@ -12,6 +16,28 @@ public class Encryption {
     public Encryption() {
 
     }
+
+/*
+    Sha-512 hashes given string inputs.
+ */
+    public String encryptThisString(String input) {
+        try {
+            MessageDigest message = MessageDigest.getInstance("SHA-512");
+            byte[] messageDigest = message.digest(input.getBytes());
+
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
         private key
 
