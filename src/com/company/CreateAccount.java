@@ -1,6 +1,7 @@
 package com.company;
-
+import org.json.JSONObject;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -23,17 +24,50 @@ public class CreateAccount {
 
         //TODO create a password checking function
 
+        createAccountFile();
         String hashedPassword = encryption.encryptThisString(password);
-        createFile(hashedUsername);
+        createUserFile(hashedUsername);
 
+        JSONObject account = new JSONObject();
+        account.put("username", hashedUsername);
+        account.put("password", hashedPassword);
+        writeAccountFile(account);
 
     }
 
-    private void createFile(String hashedUser){
+    private void createAccountFile(){
         try {
-            File myObj = new File("files/"+hashedUser+".json");
+            File myObj = new File("accounts/accounts.json");
             if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
+
+            } else {
+                System.out.println("Failed to create Accounts file");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void writeAccountFile(JSONObject account){
+        try {
+            FileWriter file = new FileWriter("accounts/accounts.json", true);
+            file.write(account.toString() + System.lineSeparator());
+            file.close();
+            System.out.println("Account created");
+        } catch (IOException e) {
+            System.out.println("Failed to add account.");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createUserFile(String hashedUser){
+        try {
+            File file = new File("files/"+hashedUser+".json");
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
             } else {
                 System.out.println("File already exists.");
             }

@@ -5,13 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7823957-991b-418f-b504-18c800e0dcc6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/com/company/AccountSession.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local-password-manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/local-password-manager.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/CreateAccount.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/CreateAccount.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/DatabaseManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/DatabaseManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/DatabaseManager.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/local-password-manager/com/company/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/CreateAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/CreateAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/DatabaseManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Encryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Encryption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,11 +47,16 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Libraries/jar_files/json-20220924.jar" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15234375" />
+    <property name="project.structure.side.proportion" value="0.55172414" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
@@ -60,7 +70,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="local-password-manager" />
-      <option name="PROGRAM_PARAMETERS" value="c" />
+      <option name="PROGRAM_PARAMETERS" value="l" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

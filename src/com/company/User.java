@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class User {
 
     // Stores users session information
-    private String key;
+    private byte[] key;
     private String userHash;
     private ArrayList<Account> accounts = new ArrayList<>();
 
@@ -14,11 +14,11 @@ public class User {
 
     }
 
-    public String getKey() {
+    public byte[] getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(byte[] key) {
         this.key = key;
     }
 

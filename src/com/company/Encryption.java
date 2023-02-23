@@ -62,10 +62,10 @@ public class Encryption {
      * @param name as a string
      * @param password as a string
      */
-    public void inisializeKey(String name, String password) {
+    public byte[] initializeKey(String name, String password) {
         byte[] nameBytes = name.getBytes();
         byte[] passwordBytes = password.getBytes();
-        createKey(nameBytes, passwordBytes);
+        return createKey(nameBytes, passwordBytes);
     }
 
     /***
@@ -73,7 +73,7 @@ public class Encryption {
      * @param name users name in bytes
      * @param password users master password in bytes
      */
-    private void createKey(byte[] name, byte[] password) {
+    private byte[] createKey(byte[] name, byte[] password) {
         int keyLength = 16;
         byte[] keyBytes = new byte[keyLength];
 
@@ -85,6 +85,7 @@ public class Encryption {
         }
 
         key = keyBytes;
+        return key;
     }
 
     /***
