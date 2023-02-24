@@ -1,11 +1,15 @@
 package com.company;
 
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Encryption {
     private byte[] key;
+    int keyLength = 16;
 
     private static final Encryption onlyInstance = new Encryption();
 
@@ -20,7 +24,7 @@ public class Encryption {
 /*
     Sha-512 hashes given string inputs.
  */
-    public String encryptThisString(String input) {
+    public String hashString(String input) {
         try {
             MessageDigest message = MessageDigest.getInstance("SHA-512");
             byte[] messageDigest = message.digest(input.getBytes());
@@ -62,10 +66,10 @@ public class Encryption {
      * @param name as a string
      * @param password as a string
      */
-    public byte[] initializeKey(String name, String password) {
+    public void initializeKey(String name, String password) {
         byte[] nameBytes = name.getBytes();
         byte[] passwordBytes = password.getBytes();
-        return createKey(nameBytes, passwordBytes);
+        createKey(nameBytes, passwordBytes);
     }
 
     /***
@@ -73,8 +77,7 @@ public class Encryption {
      * @param name users name in bytes
      * @param password users master password in bytes
      */
-    private byte[] createKey(byte[] name, byte[] password) {
-        int keyLength = 16;
+    private void createKey(byte[] name, byte[] password) {
         byte[] keyBytes = new byte[keyLength];
 
         byte[] nameBytes = makeKeyLength(name, keyLength);
@@ -85,7 +88,6 @@ public class Encryption {
         }
 
         key = keyBytes;
-        return key;
     }
 
     /***
@@ -111,5 +113,74 @@ public class Encryption {
             }
         }
         return rv;
+    }
+
+    public String encrypt(String data)
+    {
+        String rv = "";
+
+        return rv;
+    }
+
+    /*
+    def padding(data: str, keyLen: int):
+        """
+        Pads data such that padded values are bytes of how many padded bytes there are
+        pad 1: data 1
+        pad 2: data 2 2
+        ...
+        Args:
+            data: string, plaintext to pad
+            length: length of key
+
+        Returns:
+            padded: byte padded string
+        """
+        rv = bytes(data, 'utf-8')
+        padamount = keyLen - (len(data) % keyLen)
+
+        if padamount != keyLen:
+            rv = rv + padamount.to_bytes(1, 'big') * padamount
+
+        return rv
+    */
+
+    private byte[] padData(byte[] data) {
+        byte[] rv = new byte[keyLength];
+
+        return rv;
+    }
+
+    /*
+    def unpadding(text: str, keyLen: int):
+        """
+        Depads text, assume that last byte is how many chars needs to be removed
+        Args:
+            text: string, plaintext with padding
+            keyLen: lenght of key
+        Returns:
+            text: text wihtout padding
+        """
+        paddedAmount = int.from_bytes(text[-1:], 'big')
+        if paddedAmount > 0 and paddedAmount < keyLen:
+            return text[:len(text)-paddedAmount]
+        else:
+        return text
+     */
+
+    private byte[] blockCipherEncrypt(byte[] message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
+        SecretKeySpec newKey = new SecretKeySpec(key, "AES");
+        aes.init(Cipher.ENCRYPT_MODE, newKey);
+
+        return aes.doFinal(message);
+    }
+
+    private byte[] blockCipherDecrypt(byte[] message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
+        SecretKeySpec newKey = new SecretKeySpec(key, "AES");
+        aes.init(Cipher.DECRYPT_MODE, newKey);
+
+        return aes.doFinal(message);
     }
 }

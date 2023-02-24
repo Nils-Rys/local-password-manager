@@ -5,21 +5,12 @@ import java.util.ArrayList;
 public class User {
 
     // Stores users session information
-    private byte[] key;
     private String userHash;
     private ArrayList<Account> accounts = new ArrayList<>();
 
 
     public User(){
 
-    }
-
-    public byte[] getKey() {
-        return key;
-    }
-
-    public void setKey(byte[] key) {
-        this.key = key;
     }
 
     public String getUserHash() {

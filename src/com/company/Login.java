@@ -27,11 +27,11 @@ public class Login {
 
             System.out.print("Username: ");
             String username = queryUser();
-            String hashedUsername = encryption.encryptThisString(username);
+            String hashedUsername = encryption.hashString(username);
             //System.out.println("you gave us " + username);
             System.out.print("Password: ");
             String password = queryUser();
-            String hashedPassword = encryption.encryptThisString(password);
+            String hashedPassword = encryption.hashString(password);
 
 
 
@@ -40,7 +40,6 @@ public class Login {
             if (checkUser(file, hashedUsername, hashedPassword)){
                 System.out.println("Logged In");
                 user.setUserHash(hashedUsername);
-                user.setKey(encryption.initializeKey(username, password));
                 AccountSession accountSession = new AccountSession(user);
                 accountSession.logic();
             }else {

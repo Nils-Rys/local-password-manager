@@ -17,7 +17,7 @@ public class CreateAccount {
         System.out.print("Username: ");
         Scanner scanner = new Scanner(System.in);
         String username = scanner.nextLine();
-        String hashedUsername = encryption.encryptThisString(username);
+        String hashedUsername = encryption.hashString(username);
         //System.out.println("you gave us " + username);
         System.out.print("Password: ");
         String password = scanner.nextLine();
@@ -25,7 +25,7 @@ public class CreateAccount {
         //TODO create a password checking function
 
         createAccountFile();
-        String hashedPassword = encryption.encryptThisString(password);
+        String hashedPassword = encryption.hashString(password);
         createUserFile(hashedUsername);
 
         JSONObject account = new JSONObject();
