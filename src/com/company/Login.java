@@ -19,6 +19,10 @@ public class Login {
 
     public void signIn(){
         try {
+            File directory = new File("accounts");
+            if (!directory.exists()){
+                directory.mkdir();
+            }
             File file = new File("accounts/accounts.json");
 
             System.out.print("Username: ");

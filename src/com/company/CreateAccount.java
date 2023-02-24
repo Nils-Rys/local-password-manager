@@ -37,6 +37,10 @@ public class CreateAccount {
 
     private void createAccountFile(){
         try {
+            File directory = new File("accounts");
+            if (!directory.exists()){
+                directory.mkdir();
+            }
             File myObj = new File("accounts/accounts.json");
             if (myObj.createNewFile()) {
 
@@ -65,6 +69,10 @@ public class CreateAccount {
 
     private void createUserFile(String hashedUser){
         try {
+            File directory = new File("files");
+            if (!directory.exists()){
+                directory.mkdir();
+            }
             File file = new File("files/"+hashedUser+".json");
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
