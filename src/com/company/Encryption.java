@@ -1,6 +1,7 @@
 package com.company;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encryption {
     private byte[] key;
+    private final byte ivByte = (byte) 654321;
     int keyLength = 16;
 
     private static final Encryption onlyInstance = new Encryption();
@@ -27,15 +29,23 @@ public class Encryption {
     public String hashString(String input) {
         try {
             MessageDigest message = MessageDigest.getInstance("SHA-512");
-            byte[] messageDigest = message.digest(input.getBytes());
+            byte[] messageDigest;
+            try {
+                messageDigest = message.digest(input.getBytes(StandardCharsets.UTF_8));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
 
             BigInteger number = new BigInteger(1, messageDigest);
-            String hashtext = number.toString(16);
+            StringBuilder hashtext = new StringBuilder(number.toString(16));
 
             while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
+                hashtext.insert(0, "0");
             }
-            return hashtext;
+            return hashtext.toString();
         }
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
@@ -67,8 +77,15 @@ public class Encryption {
      * @param password as a string
      */
     public void initializeKey(String name, String password) {
-        byte[] nameBytes = name.getBytes();
-        byte[] passwordBytes = password.getBytes();
+        byte[] nameBytes;
+        byte[] passwordBytes;
+        try {
+            nameBytes = name.getBytes(StandardCharsets.UTF_8);
+            passwordBytes = password.getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
         createKey(nameBytes, passwordBytes);
     }
 
@@ -94,7 +111,7 @@ public class Encryption {
      * changes data length so that it is the length
      * @param data the data we want to pad or shrink
      * @param length how long we
-     * @return data with length of lenght
+     * @return data with length of length
      */
     private byte[] makeKeyLength(byte[] data, int length) {
         int dataLength = data.length;
@@ -115,72 +132,183 @@ public class Encryption {
         return rv;
     }
 
-    public String encrypt(String data)
-    {
-        String rv = "";
-
-        return rv;
-    }
-
-    /*
-    def padding(data: str, keyLen: int):
-        """
-        Pads data such that padded values are bytes of how many padded bytes there are
-        pad 1: data 1
-        pad 2: data 2 2
-        ...
-        Args:
-            data: string, plaintext to pad
-            length: length of key
-
-        Returns:
-            padded: byte padded string
-        """
-        rv = bytes(data, 'utf-8')
-        padamount = keyLen - (len(data) % keyLen)
-
-        if padamount != keyLen:
-            rv = rv + padamount.to_bytes(1, 'big') * padamount
-
-        return rv
-    */
-
-    private byte[] padData(byte[] data) {
-        byte[] rv = new byte[keyLength];
-
-        return rv;
-    }
-
-    /*
-    def unpadding(text: str, keyLen: int):
-        """
-        Depads text, assume that last byte is how many chars needs to be removed
-        Args:
-            text: string, plaintext with padding
-            keyLen: lenght of key
-        Returns:
-            text: text wihtout padding
-        """
-        paddedAmount = int.from_bytes(text[-1:], 'big')
-        if paddedAmount > 0 and paddedAmount < keyLen:
-            return text[:len(text)-paddedAmount]
-        else:
-        return text
+    /**
+     * encrypts data using CBC encryption and the key that was corrected
+     * @param data string we wish to encrypt
+     * @return encrypted string
      */
+    public String encrypt(String data) {
+        if(key == null) {
+            System.err.println("Error: key was never set");
+            System.exit(1);
+        }
 
-    private byte[] blockCipherEncrypt(byte[] message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
-        SecretKeySpec newKey = new SecretKeySpec(key, "AES");
-        aes.init(Cipher.ENCRYPT_MODE, newKey);
+        byte[] padMessage = padData(data);
 
-        return aes.doFinal(message);
+        assert padMessage != null;
+        byte[] rvByte = new byte[padMessage.length];
+
+        int times = padMessage.length / keyLength;
+        byte[] lastValue = new byte[keyLength];
+        lastValue[0] = ivByte;
+
+        for (int i = 0; i < times; i++) {
+            byte[] input = xor(lastValue, getPart(padMessage, i*keyLength, (i+1)*keyLength));
+
+            lastValue = blockCipherEncrypt(input);
+            assert lastValue != null;
+            System.arraycopy(lastValue, 0, rvByte, (i * keyLength), keyLength);
+        }
+        try {
+            String rv = new String(rvByte, StandardCharsets.UTF_8);
+            return rv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private byte[] blockCipherDecrypt(byte[] message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
-        SecretKeySpec newKey = new SecretKeySpec(key, "AES");
-        aes.init(Cipher.DECRYPT_MODE, newKey);
+    public String decrypt(String data) {
+        if(key == null) {
+            System.err.println("Error: key was never set");
+            System.exit(1);
+        }
 
-        return aes.doFinal(message);
+        String rv = "";
+        byte[] dataByte;
+        try {
+            dataByte = data.getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        System.out.println(dataByte);
+        int times = data.length() / keyLength;
+        byte[] lastValue = new byte[keyLength];
+        lastValue[0] = ivByte;
+
+        for (int i = 0; i < times; i++) {
+            byte[] block = blockCipherDecrypt(getPart(dataByte, i*keyLength, (i+1)*keyLength));
+            rv += xor(lastValue, block);
+            lastValue = getPart(dataByte, i*keyLength, (i+1)*keyLength);
+        }
+
+        return rv;
+    }
+
+    /**
+     * xor twos arrays, arrays must be the same length
+     * @param arr1
+     * @param arr2
+     * @return xor of two arrays
+     */
+    private byte[] xor(byte[] arr1, byte[] arr2)  {
+        if(arr1.length != arr2.length) {
+            System.err.println("Error: arr1 length (" + arr1.length + ") and arr2 length (" + arr2.length + ") are not the same!");
+            return null;
+        }
+        int length = arr1.length;
+
+        byte[] rv = new byte[length];
+
+        for (int i = 0; i < length; i++) {
+            rv[i] = (byte) (arr1[i] ^ arr2[i]);
+        }
+
+        return rv;
+    }
+
+    /**
+     *
+     * @param arr array to parse
+     * @param startPos position of where to start coping from includes this value
+     * @param endPos position of where to stop coping from, excludes this value
+     * @return arr from position startPos to position endPos
+     */
+    private byte[] getPart(byte[] arr, int startPos, int endPos) {
+        int length = endPos - startPos;
+        byte[] rv = new byte[length];
+        int pos = 0;
+
+        for (int i = startPos; i < endPos; i++) {
+            rv[pos] = arr[i];
+            pos++;
+        }
+
+        return rv;
+    }
+
+    /**
+     *
+     * @param data data we want to pad
+     * @return data such that data.length % keyLength = 0
+     */
+    private byte[] padData(String data) {
+        int dataLength = data.length();
+
+        int padAmount = keyLength - (dataLength % keyLength);
+        StringBuilder rv = new StringBuilder(data);
+
+        rv.append(String.valueOf((byte) padAmount).repeat(Math.max(0, padAmount)));
+
+        byte[] rvByte;
+        try {
+            rvByte = rv.toString().getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            String retrievedString = new String(rvByte, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return rvByte;
+    }
+
+    /**
+     *
+     * @param data
+     * @return
+     */
+    private byte[] unpadData(byte[] data) {
+        int dataLen = data.length;
+        int padAmount = data[dataLen - 1];
+        int rvLen = dataLen - padAmount;
+        byte[] rv = new byte[rvLen];
+
+        for (int i = 0; i < rvLen; i++) {
+            rv[i] = data[i];
+        }
+
+        return rv;
+    }
+
+    private byte[] blockCipherEncrypt(byte[] message) {
+        try {
+            Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
+            SecretKeySpec newKey = new SecretKeySpec(key, "AES");
+            aes.init(Cipher.ENCRYPT_MODE, newKey);
+
+            return aes.doFinal(message);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private byte[] blockCipherDecrypt(byte[] message) {
+        try {
+            Cipher aes = Cipher.getInstance("AES/ECB/NoPadding");
+            SecretKeySpec newKey = new SecretKeySpec(key, "AES");
+            aes.init(Cipher.DECRYPT_MODE, newKey);
+
+            return aes.doFinal(message);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

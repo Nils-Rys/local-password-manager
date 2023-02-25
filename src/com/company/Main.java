@@ -8,6 +8,7 @@ public class Main {
         User user = new User();
         Login login = new Login(user);
         CreateAccount createAccount = new CreateAccount();
+        Encryption encryption = Encryption.singleton();
         // TODO implement database
         //DatabaseManager databaseManager = new DatabaseManager();
 
@@ -29,6 +30,16 @@ public class Main {
                     // todo create account
                     createAccount.create();
                     break;
+                case "t":
+                    encryption.initializeKey("larry", "password");
+                    String temp = encryption.encrypt("This is a long test, over 16 chars");
+                    System.out.println("encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("decryption: " + temp);
+//                    System.out.println(encryption.encrypt("test"));
+//                    System.out.println(encryption.encrypt("a"));
+//                    System.out.println(encryption.encrypt(""));
+                    break;
                 default:
                     System.out.println("Invalid Arg");
                     break;
@@ -38,3 +49,5 @@ public class Main {
 	// write your code here
     }
 }
+
+
