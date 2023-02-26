@@ -262,10 +262,19 @@ public class Encryption {
         char[] strArr = string.toCharArray();
         String last = String.valueOf(strArr[strArr.length - 1]);
         int paddedAmount = Integer.parseInt(last, 16);
+
         int dataLen = data.length;
         char[] rv;
 
-        if(paddedAmount > 0 && paddedAmount < 16) {
+        boolean actuallyPadded = true;
+        for (int i = 0; i < paddedAmount; i++) {
+            if (!last.equals(String.valueOf(strArr[strArr.length - 1 - i]))) {
+                actuallyPadded = false;
+                break;
+            }
+        }
+
+        if(actuallyPadded) {
             int rvLen = dataLen - paddedAmount;
             rv = new char[rvLen];
             System.arraycopy(strArr, 0, rv, 0, rvLen);
