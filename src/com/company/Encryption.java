@@ -162,6 +162,7 @@ public class Encryption {
             lastValue = blockCipherEncrypt(input);
             System.arraycopy(lastValue, 0, rvByte, (i * keyLength), keyLength);
         }
+
         return new String(Base64.getEncoder().encode(rvByte));
     }
 
@@ -248,7 +249,7 @@ public class Encryption {
             string = data;
         }
 
-        return Base64.getEncoder().encode(string.getBytes());
+        return string.getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -257,17 +258,21 @@ public class Encryption {
      * @return
      */
     private String unpaddData(byte[] data) {
-        data = Base64.getDecoder().decode(data);
         String string = new String(data);
         char[] strArr = string.toCharArray();
         String last = String.valueOf(strArr[strArr.length - 1]);
         int paddedAmount = Integer.parseInt(last, 16);
-
         int dataLen = data.length;
-        int rvLen = dataLen - paddedAmount;
-        char[] rv = new char[rvLen];
+        char[] rv;
 
-        System.arraycopy(strArr, 0, rv, 0, rvLen);
+        if(paddedAmount > 0 && paddedAmount < 16) {
+            int rvLen = dataLen - paddedAmount;
+            rv = new char[rvLen];
+            System.arraycopy(strArr, 0, rv, 0, rvLen);
+        } else {
+            rv = new char[dataLen];
+            System.arraycopy(strArr, 0, rv, 0, dataLen);
+        }
 
         return new String(rv);
     }
