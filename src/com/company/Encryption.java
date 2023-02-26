@@ -5,13 +5,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Encryption {
     private byte[] key;
-    private final byte ivByte = (byte) 654321;
     int keyLength = 16;
+    private final int iv = 654321;
 
     private static final Encryption onlyInstance = new Encryption();
 
@@ -142,30 +144,25 @@ public class Encryption {
             System.err.println("Error: key was never set");
             System.exit(1);
         }
+        if(data.length() == 0) {
+            System.err.println("Error: data length is zero for encrypt");
+            System.exit(1);
+        }
 
         byte[] padMessage = padData(data);
 
-        assert padMessage != null;
         byte[] rvByte = new byte[padMessage.length];
 
-        int times = padMessage.length / keyLength;
-        byte[] lastValue = new byte[keyLength];
-        lastValue[0] = ivByte;
+        //converts iv to byte array that is 16 chars long
+        byte[] lastValue = makeKeyLength(padData(Integer.toHexString(iv)), keyLength);
 
+        int times = padMessage.length / keyLength;
         for (int i = 0; i < times; i++) {
             byte[] input = xor(lastValue, getPart(padMessage, i*keyLength, (i+1)*keyLength));
-
             lastValue = blockCipherEncrypt(input);
-            assert lastValue != null;
             System.arraycopy(lastValue, 0, rvByte, (i * keyLength), keyLength);
         }
-        try {
-            String rv = new String(rvByte, StandardCharsets.UTF_8);
-            return rv;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new String(Base64.getEncoder().encode(rvByte));
     }
 
     public String decrypt(String data) {
@@ -174,26 +171,21 @@ public class Encryption {
             System.exit(1);
         }
 
-        String rv = "";
-        byte[] dataByte;
-        try {
-            dataByte = data.getBytes(StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        System.out.println(dataByte);
-        int times = data.length() / keyLength;
-        byte[] lastValue = new byte[keyLength];
-        lastValue[0] = ivByte;
+        byte[] dataByte = Base64.getDecoder().decode(data);
+        int times = dataByte.length / keyLength;
+        byte[] rvByte = new byte[dataByte.length];
+        byte[] lastValue = makeKeyLength(padData(Integer.toHexString(iv)), keyLength);
+        byte[] block;
+        byte[] part;
 
         for (int i = 0; i < times; i++) {
-            byte[] block = blockCipherDecrypt(getPart(dataByte, i*keyLength, (i+1)*keyLength));
-            rv += xor(lastValue, block);
-            lastValue = getPart(dataByte, i*keyLength, (i+1)*keyLength);
+            part = getPart(dataByte, i*keyLength, (i+1)*keyLength);
+            block = blockCipherDecrypt(part);
+            System.arraycopy(xor(block, lastValue), 0, rvByte, (i * keyLength), keyLength);
+            lastValue = part;
         }
 
-        return rv;
+        return unpaddData(rvByte);
     }
 
     /**
@@ -205,6 +197,7 @@ public class Encryption {
     private byte[] xor(byte[] arr1, byte[] arr2)  {
         if(arr1.length != arr2.length) {
             System.err.println("Error: arr1 length (" + arr1.length + ") and arr2 length (" + arr2.length + ") are not the same!");
+            System.exit(1);
             return null;
         }
         int length = arr1.length;
@@ -247,25 +240,15 @@ public class Encryption {
         int dataLength = data.length();
 
         int padAmount = keyLength - (dataLength % keyLength);
-        StringBuilder rv = new StringBuilder(data);
 
-        rv.append(String.valueOf((byte) padAmount).repeat(Math.max(0, padAmount)));
-
-        byte[] rvByte;
-        try {
-            rvByte = rv.toString().getBytes(StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        String string;
+        if(padAmount != 16) {
+             string = data + Integer.toHexString(padAmount).repeat(padAmount);
+        } else {
+            string = data;
         }
 
-        try {
-            String retrievedString = new String(rvByte, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return rvByte;
+        return Base64.getEncoder().encode(string.getBytes());
     }
 
     /**
@@ -273,17 +256,20 @@ public class Encryption {
      * @param data
      * @return
      */
-    private byte[] unpadData(byte[] data) {
+    private String unpaddData(byte[] data) {
+        data = Base64.getDecoder().decode(data);
+        String string = new String(data);
+        char[] strArr = string.toCharArray();
+        String last = String.valueOf(strArr[strArr.length - 1]);
+        int paddedAmount = Integer.parseInt(last, 16);
+
         int dataLen = data.length;
-        int padAmount = data[dataLen - 1];
-        int rvLen = dataLen - padAmount;
-        byte[] rv = new byte[rvLen];
+        int rvLen = dataLen - paddedAmount;
+        char[] rv = new char[rvLen];
 
-        for (int i = 0; i < rvLen; i++) {
-            rv[i] = data[i];
-        }
+        System.arraycopy(strArr, 0, rv, 0, rvLen);
 
-        return rv;
+        return new String(rv);
     }
 
     private byte[] blockCipherEncrypt(byte[] message) {
@@ -295,6 +281,7 @@ public class Encryption {
             return aes.doFinal(message);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
+            System.exit(1);
             return null;
         }
     }
@@ -308,6 +295,7 @@ public class Encryption {
             return aes.doFinal(message);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
+            System.exit(1);
             return null;
         }
     }

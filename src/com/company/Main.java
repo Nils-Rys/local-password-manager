@@ -33,12 +33,34 @@ public class Main {
                 case "t":
                     encryption.initializeKey("larry", "password");
                     String temp = encryption.encrypt("This is a long test, over 16 chars");
+                    System.out.println("Encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("Decryption: " + temp);
+                    System.out.println("----------------------------------------------------------------");
+
+                    temp = encryption.encrypt("This is a long test, over 16 chars aseteastasehtals;htdkjlsahtaskljtehsajkdthalksjthase");
                     System.out.println("encryption: " + temp);
                     temp = encryption.decrypt(temp);
                     System.out.println("decryption: " + temp);
-//                    System.out.println(encryption.encrypt("test"));
-//                    System.out.println(encryption.encrypt("a"));
-//                    System.out.println(encryption.encrypt(""));
+                    System.out.println("----------------------------------------------------------------");
+
+                    temp = encryption.encrypt("this is a test a");
+                    System.out.println("encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("decryption: " + temp);
+                    System.out.println("----------------------------------------------------------------");
+
+                    temp = encryption.encrypt("this is a test athis is a test athis is a test a");
+                    System.out.println("encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("decryption: " + temp);
+                    System.out.println("----------------------------------------------------------------");
+
+                    temp = encryption.encrypt("a");
+                    System.out.println("encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("decryption: " + temp);
+                    System.out.println("----------------------------------------------------------------");
                     break;
                 default:
                     System.out.println("Invalid Arg");
