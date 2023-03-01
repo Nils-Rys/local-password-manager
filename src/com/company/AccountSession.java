@@ -12,9 +12,11 @@ public class AccountSession {
 
     private User user;
     private Encryption encryption = Encryption.singleton();
+    private PasswordGenerator passwordGenerator;
 
     public AccountSession(User user){
         this.user = user;
+        passwordGenerator = new PasswordGenerator();
     }
 
     public void logic(){
@@ -42,21 +44,21 @@ public class AccountSession {
     private void createNewPass(){
         System.out.print("Creating new password. \n  Please give website name: ");
         String website = queryUser();
-        System.out.print("Creating new password. \n  Please give Username: ");
+        System.out.print("  Please give Username: ");
         String username = queryUser();
 
         //todo fancy password gen
 
-        String password = "PLACEHOLDER";
+        String password = passwordGenerator.generatePass();
 
         System.out.println("Password created is:\n" +password);
-        System.out.println("web created is:\n" +website);
-        System.out.println("user created is:\n" +username);
+//        System.out.println("web created is:\n" +website);
+//        System.out.println("user created is:\n" +username);
         
         
 
         JSONObject account = new JSONObject();
-        // todo call encrypt functions on variables for storage
+        // writes all the website/pass info to a file
         account.put("website", encryption.encrypt(website));
         account.put("username", encryption.encrypt(username));
         account.put("password", encryption.encrypt(password));
