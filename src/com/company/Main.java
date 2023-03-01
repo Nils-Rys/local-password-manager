@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Scanner;
+
 public class Main {
 
     // Milestone 1 	Frame work, pseudocode, how to create keys and encryption method
@@ -11,11 +13,15 @@ public class Main {
         Encryption encryption = Encryption.singleton();
         // TODO implement database
         //DatabaseManager databaseManager = new DatabaseManager();
+        boolean session = true;
+        while (session){
+            System.out.println("What do you intend to do? H for help");
 
-        if (args.length == 0){
-            System.out.println("Expecting at least one arg. H for help");
-        }else{
-            switch (args[0]){
+            Scanner scanner = new Scanner(System.in);
+            String response = scanner.nextLine();
+
+	        
+            switch (response){
                 case "H":
                 case "h":
                     System.out.println("Valid Args:\n   H - displays all valid args\n   L - Login to existing account\n   C - Create an account");
@@ -53,8 +59,9 @@ public class Main {
                 default:
                     System.out.println("Invalid Arg");
                     break;
-
-            }
+	
+	            
+	        }
         }
 	// write your code here
     }

@@ -12,7 +12,7 @@ public class Login {
     private Encryption encryption;
     public Login(User user){
         this.user = user;
-        encryption = new Encryption();
+        encryption = Encryption.singleton();
     }
 
 
@@ -38,6 +38,7 @@ public class Login {
 
             //TODO check if hashes are equivalent to stored hashes
             if (checkUser(file, hashedUsername, hashedPassword)){
+                encryption.initializeKey(username, password);
                 System.out.println("Logged In");
                 user.setUserHash(hashedUsername);
                 AccountSession accountSession = new AccountSession(user);

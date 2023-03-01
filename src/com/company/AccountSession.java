@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class AccountSession {
 
     private User user;
+    private Encryption encryption = Encryption.singleton();
 
     public AccountSession(User user){
         this.user = user;
@@ -49,12 +50,16 @@ public class AccountSession {
         String password = "PLACEHOLDER";
 
         System.out.println("Password created is:\n" +password);
+        System.out.println("web created is:\n" +website);
+        System.out.println("user created is:\n" +username);
+        
+        
 
         JSONObject account = new JSONObject();
         // todo call encrypt functions on variables for storage
-        account.put("website", website);
-        account.put("username", username);
-        account.put("password", password);
+        account.put("website", encryption.encrypt(website));
+        account.put("username", encryption.encrypt(username));
+        account.put("password", encryption.encrypt(password));
 
         writePassFile(account);
 
@@ -89,12 +94,12 @@ public class AccountSession {
             boolean foundWeb = false;
 
             while (reader.hasNextLine() && !foundWeb){
-
+            	
                 JSONObject temp = new JSONObject(reader.nextLine());
-                if (temp.get("website").toString().equalsIgnoreCase(website)){
-                    System.out.println("Website: " + temp.get("website"));
-                    System.out.println("Username: " + temp.get("username"));
-                    System.out.println("Password: " + temp.get("password"));
+                if (encryption.decrypt(temp.get("website").toString()).equalsIgnoreCase(website)){
+                    System.out.println("Website: " + encryption.decrypt(temp.get("website").toString()));
+                    System.out.println("Username: " + encryption.decrypt(temp.get("username").toString()));
+                    System.out.println("Password: " + encryption.decrypt(temp.get("password").toString()));
                     foundWeb = true;
                 }
             }
@@ -117,7 +122,7 @@ public class AccountSession {
             while (reader.hasNextLine() ){
 
                 JSONObject temp = new JSONObject(reader.nextLine());
-                System.out.println(temp.get("website"));
+                System.out.println(encryption.decrypt(temp.get("website").toString()));
             }
         } catch (IOException e) {
             System.out.println("Websites Not found.");
