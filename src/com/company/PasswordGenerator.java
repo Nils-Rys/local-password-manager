@@ -44,7 +44,6 @@ public class PasswordGenerator {
 		// Selects random character to add to the password until password length is achieved
 		while(chars.size() > 0 && length != 0) {
 			int type = random.nextInt(chars.size());
-			System.out.println(type);
 			String charType = chars.get(type);
 			if (charType.equals(LOWER)){
 				lower--;
