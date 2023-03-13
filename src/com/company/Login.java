@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class Login {
     private User user;
     private Encryption encryption;
-    public Login(User user){
-        this.user = user;
+    public Login(){
+        user = new User();
         encryption = Encryption.singleton();
     }
 
