@@ -140,8 +140,6 @@ public class AccountSession {
         System.out.print("Finding Password. \n  Please give website name: ");
         String website = queryUser();
         searchWebsite(website);
-
-
     }
 
     // looks up and displays the website username and password based on the given website name
