@@ -246,7 +246,8 @@ public class Encryption {
         if(padAmount != 16) {
              string = data + Integer.toHexString(padAmount).repeat(padAmount);
         } else {
-            string = data;
+            //when length is 16 we pad with 0s
+            string = data + "0".repeat(16);
         }
 
         return string.getBytes(StandardCharsets.UTF_8);
@@ -266,22 +267,14 @@ public class Encryption {
         int dataLen = data.length;
         char[] rv;
 
-        boolean actuallyPadded = true;
-        for (int i = 0; i < paddedAmount; i++) {
-            if (!last.equals(String.valueOf(strArr[strArr.length - 1 - i]))) {
-                actuallyPadded = false;
-                break;
-            }
-        }
-
-        if(actuallyPadded) {
-            int rvLen = dataLen - paddedAmount;
-            rv = new char[rvLen];
-            System.arraycopy(strArr, 0, rv, 0, rvLen);
+        int rvLen;
+        if(paddedAmount != 0) {
+            rvLen = dataLen - paddedAmount;
         } else {
-            rv = new char[dataLen];
-            System.arraycopy(strArr, 0, rv, 0, dataLen);
+            rvLen = dataLen - 16;
         }
+        rv = new char[rvLen];
+        System.arraycopy(strArr, 0, rv, 0, rvLen);
 
         return new String(rv);
     }

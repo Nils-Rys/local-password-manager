@@ -49,6 +49,12 @@ public class Main {
                     temp = encryption.decrypt(temp);
                     System.out.println("decryption: " + temp);
                     System.out.println("----------------------------------------------------------------");
+
+                    temp = encryption.encrypt("02)0BHC1dBkv@l#1");
+                    System.out.println("encryption: " + temp);
+                    temp = encryption.decrypt(temp);
+                    System.out.println("decryption: " + temp);
+                    System.out.println("----------------------------------------------------------------");
                     break;
                 default:
                     System.out.println("Invalid Arg");
